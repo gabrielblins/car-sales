@@ -56,7 +56,7 @@ if __name__ == '__main__':
         .value_counts(normalize=True, dropna=False)
         .sort_index()
         .plot(kind='bar', ax=ax_date_crawled))
-    fig.savefig('date_crawled.png')
+    fig.savefig('plots/date_crawled.png')
     # Saving the plot of the bar chart of ad_created column
     fig, ax_ad_created = plt.subplots(figsize=(10, 8))
     (autos.ad_created
@@ -64,7 +64,7 @@ if __name__ == '__main__':
         .value_counts(normalize=True, dropna=False)
         .sort_index()
         .plot(kind='bar', ax=ax_ad_created))
-    fig.savefig('ad_created.png')
+    fig.savefig('plots/ad_created.png')
     # Saving the plot of the bar chart of last_seen column
     fig, ax_last_seen = plt.subplots(figsize=(10, 8))
     (autos.last_seen
@@ -72,7 +72,7 @@ if __name__ == '__main__':
         .value_counts(normalize=True, dropna=False)
         .sort_index()
         .plot(kind='bar', ax=ax_last_seen))
-    fig.savefig('last_seen.png')
+    fig.savefig('plots/last_seen.png')
     # Filtering the dataframe by the registration_year column,
     # fitting between the years 1900 and 2016
     autos = autos[autos.registration_year.between(1900, 2016)]
@@ -82,7 +82,7 @@ if __name__ == '__main__':
         .value_counts(normalize=True)
         .sort_index()
         .plot(kind='bar', ax=ax_reg_year))
-    fig.savefig('registration_year.png')
+    fig.savefig('plots/registration_year.png')
     # Creating a Series with the Top 20 brands most common in the dataset
     top20_brands = autos.brand.value_counts().head(20)
     # Creating a Dictionary with the Top 20 brands and their respective mean
@@ -111,4 +111,4 @@ if __name__ == '__main__':
         kind='scatter',
         title='Mean price vs. mean km (ρ = {:.2f})'.format(corr),
         ax=ax_top_brands)
-    fig.savefig('mean_price_vs_mean_km.png')
+    fig.savefig('plots/mean_price_vs_mean_km.png')
