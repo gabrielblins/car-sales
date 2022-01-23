@@ -19,6 +19,22 @@ import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
 
+# Defining functions
+def plot_bar_chart(data_frame,column_name, is_str=True):
+    '''
+    This function plots a bar chart of the dataframe and save it
+    '''
+    figure, axis = plt.subplots(figsize=(10, 8))
+    if is_str:
+        (data_frame[column_name].str[:10]
+                                .value_counts(normalize=True, dropna=False)
+                                .sort_index()
+                                .plot(kind='bar', ax=axis))
+    else:
+        (data_frame[column_name].value_counts(normalize=True, dropna=False)
+                                .sort_index().plot(kind='bar', ax=axis))
+    figure.savefig(f'plots/{column_name}.png')
+
 if __name__ == '__main__':
     # Reading the csv file using pandas
     autos = pd.read_csv('autos.csv', encoding='latin-1')
@@ -50,39 +66,16 @@ if __name__ == '__main__':
                                        autos.price.quantile(0.999))])
     # Looking at date columns
     # Saving the plot of the bar chart of date_crawled column
-    fig, ax_date_crawled = plt.subplots(figsize=(10, 8))
-    (autos.date_crawled
-        .str[:10]
-        .value_counts(normalize=True, dropna=False)
-        .sort_index()
-        .plot(kind='bar', ax=ax_date_crawled))
-    fig.savefig('plots/date_crawled.png')
+    plot_bar_chart(autos, 'date_crawled')
     # Saving the plot of the bar chart of ad_created column
-    fig, ax_ad_created = plt.subplots(figsize=(10, 8))
-    (autos.ad_created
-        .str[:10]
-        .value_counts(normalize=True, dropna=False)
-        .sort_index()
-        .plot(kind='bar', ax=ax_ad_created))
-    fig.savefig('plots/ad_created.png')
+    plot_bar_chart(autos, 'ad_created')
     # Saving the plot of the bar chart of last_seen column
-    fig, ax_last_seen = plt.subplots(figsize=(10, 8))
-    (autos.last_seen
-        .str[:10]
-        .value_counts(normalize=True, dropna=False)
-        .sort_index()
-        .plot(kind='bar', ax=ax_last_seen))
-    fig.savefig('plots/last_seen.png')
+    plot_bar_chart(autos, 'last_seen')
     # Filtering the dataframe by the registration_year column,
     # fitting between the years 1900 and 2016
     autos = autos[autos.registration_year.between(1900, 2016)]
     # Saving the plot of the bar chart of registration_year column
-    fig, ax_reg_year = plt.subplots(figsize=(10, 8))
-    (autos.registration_year
-        .value_counts(normalize=True)
-        .sort_index()
-        .plot(kind='bar', ax=ax_reg_year))
-    fig.savefig('plots/registration_year.png')
+    plot_bar_chart(autos, 'registration_year', is_str=False)
     # Creating a Series with the Top 20 brands most common in the dataset
     top20_brands = autos.brand.value_counts().head(20)
     # Creating a Dictionary with the Top 20 brands and their respective mean
@@ -104,11 +97,11 @@ if __name__ == '__main__':
     # Creating a plot with the correlation between
     # the mean price and mean km for the top 20 brands
     corr = df_top_brands.corr()['mean_price'][1]
-    fig, ax_top_brands = plt.subplots(figsize=(10, 8))
+    fig_brand, ax_top_brands = plt.subplots(figsize=(10, 8))
     df_top_brands.plot(
         x='mean_price',
         y='mean_km',
         kind='scatter',
         title='Mean price vs. mean km (ρ = {:.2f})'.format(corr),
         ax=ax_top_brands)
-    fig.savefig('plots/mean_price_vs_mean_km.png')
+    fig_brand.savefig('plots/mean_price_vs_mean_km.png')
